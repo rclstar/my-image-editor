@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Convertisseur eqsl a 960x629 jpg</title>
+<style>
+body {
+  background-color: Lavender;
+  font-family: Arial, sans-serif;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+.file-input-container, .button-container, .filter-container, .text-overlay-container {
+  margin: 10px 0;
+}
+.btn {
+  margin: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  transition: transform 0.2s, background 0.2s;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+.btn-choisir-fichier {
+  background: linear-gradient(45deg, #007BFF, #00CFFF);
+}
+.btn-choisir-logo {
+  background: linear-gradient(45deg, #FF5733, #FF8C33);
+}
+.btn-convertir-960x629-72ppp {
+  background: linear-gradient(45deg, #FF33FF, #FF66FF);
+}
+.hidden-input {
+  display: none;
+}
+#canvas {
+  display: block;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+.progress {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: none;
+}
+.progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #007BFF;
+  border-radius: 5px;
+}
+/* Styles supplémentaires pour les nouvelles fonctionnalités */
+.input {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+}
+.button {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+  background: #6694f6;
+  border: 0;
+  border-radius: 15px;
+  padding: 10px 25px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  font-size: 14px;
+}
+.button:hover {
+  background: #8acef1;
+}
+.button_disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+.a, .a:visited {
+  color: #6694f6;
+}
+.a:hover {
+  text-decoration: none;
+}
+.a_hidden {
+  opacity: 0;
+}
+.text-instructions {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    background-color: #ff8c33;
+    padding: 5px;
+    border-radius: 5px;
+}
+.create-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border-radius: 5px;
+}
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+  <!-- Bouton pour choisir l'image principale -->
+  <div class="file-input-container">
+    <button class="btn btn-choisir-fichier" onclick="document.getElementById('inputFile').click()">Choisir un fichier</button>
+    <input type="file" id="inputFile" accept="image/*" class="hidden-input">
+  </div>
+  <!-- Bouton pour choisir le logo -->
+  <div class="file-input-container">
+    <button class="btn btn-choisir-logo" onclick="document.getElementById('logoFile').click()">Choisir le logo</button>
+    <input type="file" id="logoFile" accept="image/png" class="hidden-input">
+  </div>
+  <!-- Explication pour les fichiers PNG -->
+  <p>Seuls les fichiers PNG sont acceptés pour le logo ou cadre.</p>
+  <!-- Bouton pour convertir l'image -->
+  <div class="button-container">
+    <button class="btn btn-convertir-960x629-72ppp" onclick="convertir960x629A72ppp()">Convertir à 960x629 et 72ppp</button>
+  </div>
+  <!-- Canvas pour afficher l'image -->
+  <canvas id="canvas"></canvas>
+  <!-- Barre de progression -->
+  <div class="progress">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  <!-- Nouvelles fonctionnalités -->
+  <p>
+    <button class="button" id="saveBtn">Sauvegarder</button>
+  </p>
+  <p>
+    <button class="button" id="resizeBtn">Redimensionner</button>
+    <button class="button" id="downloadBtn">Télécharger</button>
+  </p>
+  <!-- Contrôles pour les filtres d'image -->
+  <div class="filter-container">
+    <label>Luminosité: <input type="range" id="brightnessRange" min="0" max="200" value="100"></label>
+    <label>Contraste: <input type="range" id="contrastRange" min="0" max="200" value="100"></label>
+    <label>Flou: <input type="range" id="blurRange" min="0" max="10" step="0.1" value="0"></label>
+  </div>
+  <!-- Entrée de texte pour superposition -->
+  <div class="text-overlay-container">
+    <label for="overlayText">Entrez votre texte ici et cliquez sur la photo où vous souhaitez l'ajouter:</label>
+    <input type="text" id="overlayText" placeholder="Entrez votre texte ici">
+    <br>
+    <label for="textColor">Couleur du texte:</label>
+    <input type="color" id="textColor" value="#FFFFFF">
+    <br>
+    <label for="textSize">Taille du texte:</label>
+    <input type="number" id="textSize" value="30">
+    <br>
+    <label for="textShadow">Ombre du texte:</label>
+    <input type="checkbox" id="textShadow">
+    <br>
+    <label for="textBorder">Bordure du texte:</label>
+    <input type="checkbox" id="textBorder">
+    <br>
+    <button class="button" onclick="appliquerTexte()">Appliquer le texte</button>
+  </div>
+</div>
+
+<div class="text-instructions">EQSL</div>
+
+
+<script>
+var img = new Image();
+var logo = new Image();
+var imgLoaded = false;
+var logoLoaded = false;
+var textPosX = 0;
+var textPosY = 0;
+
+function chargerImage(event, callback) {
+  var fichier = event.target.files[0];
+  if (!fichier) {
+    alert("Veuillez sélectionner un fichier image.");
+    return;
+  }
+  var lecteur = new FileReader();
+  lecteur.onload = function(e) {
+    callback(e.target.result);
+  };
+  lecteur.readAsDataURL(fichier);
+}
+
+function convertir960x629A72ppp() {
+  if (!imgLoaded) {
+    alert("Veuillez sélectionner une image.");
+    return;
+  }
+
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  var largeurSouhaitee = 960;
+  var hauteurSouhaitee = 629;
+  canvas.width = largeurSouhaitee;
+  canvas.height = hauteurSouhaitee;
+
+  ApplyFilters();
+  ctx.drawImage(img, 0, 0, largeurSouhaitee, hauteurSouhaitee);
+  if (logoLoaded) {
+    ajouterLogo(ctx, largeurSouhaitee, hauteurSouhaitee);
+  }
+
+  var overlayText = document.getElementById('overlayText').value;
+  if (overlayText) {
+    ajouterTexte(ctx, overlayText, textPosX, textPosY);
+  }
+
+  telechargerImage(canvas, 'image-960x629-72ppp.jpg');
+}
+
+function ajouterLogo(ctx, largeur, hauteur) {
+  ctx.drawImage(logo, 0, 0, largeur, hauteur);
+}
+
+function ajouterTexte(ctx, texte, x, y) {
+  var textSize = document.getElementById('textSize').value;
+  var textColor = document.getElementById('textColor').value;
+  var textShadow = document.getElementById('textShadow').checked;
+  var textBorder = document.getElementById('textBorder').checked;
+
+  ctx.font = textSize + "px Arial";
+  ctx.fillStyle = textColor;
+  ctx.textAlign = "center";
+
+  if (textShadow) {
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 5;
+  } else {
+    ctx.shadowColor = "transparent";
+  }
+
+  if (textBorder) {
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.strokeText(texte, x, y);
+  }
+
+  ctx.fillText(texte, x, y);
+}
+
+function telechargerImage(canvas, nomFichier) {
+  var qualité = 0.9; // Initialiser avec une qualité élevée
+  var tailleMax = 2 * 1024 * 1024; // 2 Mo en octets
+
+  var dataURL = canvas.toDataURL('image/jpeg', qualité);
+
+  // Réduire progressivement la qualité jusqu'à atteindre la taille de fichier souhaitée
+  while (dataURL.length > tailleMax && qualité > 0.1) {
+    qualité -= 0.1;
+    dataURL = canvas.toDataURL('image/jpeg', qualité);
+  }
+
+  var link = document.createElement('a');
+  link.download = nomFichier;
+  link.href = dataURL;
+  link.click();
+}
+
+// Gestion des événements pour charger les fichiers
+document.getElementById('inputFile').addEventListener('change', function(event) {
+  chargerImage(event, function(result) {
+    img.src = result;
+    img.onload = function() {
+      imgLoaded = true;
+      Init();
+    };
+  });
+});
+document.getElementById('logoFile').addEventListener('change', function(event) {
+  chargerImage(event, function(result) {
+    logo.src = result;
+    logo.onload = function() {
+      logoLoaded = true;
+      ApplyFilters(); // Assurez-vous que le logo est appliqué après le chargement
+    };
+  });
+});
+
+/* Fonctions et événements supplémentaires */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const saveBtn = document.getElementById("saveBtn");
+const resizeBtn = document.getElementById("resizeBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const brightnessRange = document.getElementById("brightnessRange");
+const contrastRange = document.getElementById("contrastRange");
+const blurRange = document.getElementById("blurRange");
+
+brightnessRange.addEventListener("input", ApplyFilters);
+contrastRange.addEventListener("input", ApplyFilters);
+blurRange.addEventListener("input", ApplyFilters);
+
+canvas.addEventListener("click", function(event) {
+  var rect = canvas.getBoundingClientRect();
+  textPosX = event.clientX - rect.left;
+  textPosY = event.clientY - rect.top;
+  RedrawCanvas();
+});
+
+function ApplyFilters() {
+    const brightness = brightnessRange.value;
+    const contrast = contrastRange.value;
+    const blur = blurRange.value;
+
+    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+    RedrawCanvas();
+}
+
+function Init() {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    RedrawCanvas();
+}
+
+function RedrawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    if (logoLoaded) {
+        ctx.filter = 'none';
+        ajouterLogo(ctx, canvas.width, canvas.height);
+    }
+
+    var overlayText = document.getElementById('overlayText').value;
+    if (overlayText) {
+        ajouterTexte(ctx, overlayText, textPosX, textPosY);
+    }
+}
+
+saveBtn.addEventListener("click", function() {
+  telechargerImage(canvas, 'image-sauvegardée.jpg');
+});
+
+resizeBtn.addEventListener("click", function() {
+  convertir960x629A72ppp();
+});
+
+downloadBtn.addEventListener("click", function() {
+  telechargerImage(canvas, 'image-téléchargée.jpg');
+});
+
+function appliquerTexte() {
+  if (!imgLoaded) {
+    alert("Veuillez d'abord charger une image.");
+    return;
+  }
+  RedrawCanvas();
+}
+</script>
+
+</body>
+</html>
