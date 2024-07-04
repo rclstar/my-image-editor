@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Convertisseur eqsl a 960x629 jpg</title>
+<style>
+body {
+  background-color: Lavender;
+  font-family: Arial, sans-serif;
+}
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+.file-input-container, .button-container, .filter-container, .text-overlay-container {
+  margin: 10px 0;
+}
+.btn {
+  margin: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  transition: transform 0.2s, background 0.2s;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+.btn-choisir-fichier {
+  background: linear-gradient(45deg, #007BFF, #00CFFF);
+}
+.btn-choisir-logo {
+  background: linear-gradient(45deg, #FF5733, #FF8C33);
+}
+.btn-convertir-960x629-72ppp {
+  background: linear-gradient(45deg, #FF33FF, #FF66FF);
+}
+.hidden-input {
+  display: none;
+}
+#canvas {
+  display: block;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+.progress {
+  width: 100%;
+  background-color: #f3f3f3;
+  border-radius: 5px;
+  margin-top: 20px;
+  display: none;
+}
+.progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #007BFF;
+  border-radius: 5px;
+}
+/* Styles supplémentaires pour les nouvelles fonctionnalités */
+.input {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+}
+.button {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+  background: #6694f6;
+  border: 0;
+  border-radius: 15px;
+  padding: 10px 25px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  font-size: 14px;
+}
+.button:hover {
+  background: #8acef1;
+}
+.button_disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+.a, .a:visited {
+  color: #6694f6;
+}
+.a:hover {
+  text-decoration: none;
+}
+.a_hidden {
+  opacity: 0;
+}
+.text-instructions {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    background-color: #ff8c33;
+    padding: 5px;
+    border-radius: 5px;
+}
+.create-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border-radius: 5px;
+}
+</style>
+</head>

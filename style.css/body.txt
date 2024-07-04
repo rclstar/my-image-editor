@@ -1,0 +1,62 @@
+<body>
+
+<div class="wrapper">
+  <!-- Bouton pour choisir l'image principale -->
+  <div class="file-input-container">
+    <button class="btn btn-choisir-fichier" onclick="document.getElementById('inputFile').click()">Choisir un fichier</button>
+    <input type="file" id="inputFile" accept="image/*" class="hidden-input">
+  </div>
+  <!-- Bouton pour choisir le logo -->
+  <div class="file-input-container">
+    <button class="btn btn-choisir-logo" onclick="document.getElementById('logoFile').click()">Choisir le logo</button>
+    <input type="file" id="logoFile" accept="image/png" class="hidden-input">
+  </div>
+  <!-- Explication pour les fichiers PNG -->
+  <p>Seuls les fichiers PNG sont acceptés pour le logo ou cadre.</p>
+  <!-- Bouton pour convertir l'image -->
+  <div class="button-container">
+    <button class="btn btn-convertir-960x629-72ppp" onclick="convertir960x629A72ppp()">Convertir à 960x629 et 72ppp</button>
+  </div>
+  <!-- Canvas pour afficher l'image -->
+  <canvas id="canvas"></canvas>
+  <!-- Barre de progression -->
+  <div class="progress">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  <!-- Nouvelles fonctionnalités -->
+  <p>
+    <button class="button" id="saveBtn">Sauvegarder</button>
+  </p>
+  <p>
+    <button class="button" id="resizeBtn">Redimensionner</button>
+    <button class="button" id="downloadBtn">Télécharger</button>
+  </p>
+  <!-- Contrôles pour les filtres d'image -->
+  <div class="filter-container">
+    <label>Luminosité: <input type="range" id="brightnessRange" min="0" max="200" value="100"></label>
+    <label>Contraste: <input type="range" id="contrastRange" min="0" max="200" value="100"></label>
+    <label>Flou: <input type="range" id="blurRange" min="0" max="10" step="0.1" value="0"></label>
+  </div>
+  <!-- Entrée de texte pour superposition -->
+  <div class="text-overlay-container">
+    <label for="overlayText">Entrez votre texte ici et cliquez sur la photo où vous souhaitez l'ajouter:</label>
+    <input type="text" id="overlayText" placeholder="Entrez votre texte ici">
+    <br>
+    <label for="textColor">Couleur du texte:</label>
+    <input type="color" id="textColor" value="#FFFFFF">
+    <br>
+    <label for="textSize">Taille du texte:</label>
+    <input type="number" id="textSize" value="30">
+    <br>
+    <label for="textShadow">Ombre du texte:</label>
+    <input type="checkbox" id="textShadow">
+    <br>
+    <label for="textBorder">Bordure du texte:</label>
+    <input type="checkbox" id="textBorder">
+    <br>
+    <button class="button" onclick="appliquerTexte()">Appliquer le texte</button>
+  </div>
+</div>
+
+<div class="text-instructions">EQSL</div>
+

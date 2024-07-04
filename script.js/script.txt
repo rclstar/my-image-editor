@@ -1,0 +1,193 @@
+<script>
+var img = new Image();
+var logo = new Image();
+var imgLoaded = false;
+var logoLoaded = false;
+var textPosX = 0;
+var textPosY = 0;
+
+function chargerImage(event, callback) {
+  var fichier = event.target.files[0];
+  if (!fichier) {
+    alert("Veuillez sélectionner un fichier image.");
+    return;
+  }
+  var lecteur = new FileReader();
+  lecteur.onload = function(e) {
+    callback(e.target.result);
+  };
+  lecteur.readAsDataURL(fichier);
+}
+
+function convertir960x629A72ppp() {
+  if (!imgLoaded) {
+    alert("Veuillez sélectionner une image.");
+    return;
+  }
+
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  var largeurSouhaitee = 960;
+  var hauteurSouhaitee = 629;
+  canvas.width = largeurSouhaitee;
+  canvas.height = hauteurSouhaitee;
+
+  ApplyFilters();
+  ctx.drawImage(img, 0, 0, largeurSouhaitee, hauteurSouhaitee);
+  if (logoLoaded) {
+    ajouterLogo(ctx, largeurSouhaitee, hauteurSouhaitee);
+  }
+
+  var overlayText = document.getElementById('overlayText').value;
+  if (overlayText) {
+    ajouterTexte(ctx, overlayText, textPosX, textPosY);
+  }
+
+  telechargerImage(canvas, 'image-960x629-72ppp.jpg');
+}
+
+function ajouterLogo(ctx, largeur, hauteur) {
+  ctx.drawImage(logo, 0, 0, largeur, hauteur);
+}
+
+function ajouterTexte(ctx, texte, x, y) {
+  var textSize = document.getElementById('textSize').value;
+  var textColor = document.getElementById('textColor').value;
+  var textShadow = document.getElementById('textShadow').checked;
+  var textBorder = document.getElementById('textBorder').checked;
+
+  ctx.font = textSize + "px Arial";
+  ctx.fillStyle = textColor;
+  ctx.textAlign = "center";
+
+  if (textShadow) {
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 5;
+  } else {
+    ctx.shadowColor = "transparent";
+  }
+
+  if (textBorder) {
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.strokeText(texte, x, y);
+  }
+
+  ctx.fillText(texte, x, y);
+}
+
+function telechargerImage(canvas, nomFichier) {
+  var qualité = 0.9; // Initialiser avec une qualité élevée
+  var tailleMax = 2 * 1024 * 1024; // 2 Mo en octets
+
+  var dataURL = canvas.toDataURL('image/jpeg', qualité);
+
+  // Réduire progressivement la qualité jusqu'à atteindre la taille de fichier souhaitée
+  while (dataURL.length > tailleMax && qualité > 0.1) {
+    qualité -= 0.1;
+    dataURL = canvas.toDataURL('image/jpeg', qualité);
+  }
+
+  var link = document.createElement('a');
+  link.download = nomFichier;
+  link.href = dataURL;
+  link.click();
+}
+
+// Gestion des événements pour charger les fichiers
+document.getElementById('inputFile').addEventListener('change', function(event) {
+  chargerImage(event, function(result) {
+    img.src = result;
+    img.onload = function() {
+      imgLoaded = true;
+      Init();
+    };
+  });
+});
+document.getElementById('logoFile').addEventListener('change', function(event) {
+  chargerImage(event, function(result) {
+    logo.src = result;
+    logo.onload = function() {
+      logoLoaded = true;
+      ApplyFilters(); // Assurez-vous que le logo est appliqué après le chargement
+    };
+  });
+});
+
+/* Fonctions et événements supplémentaires */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const saveBtn = document.getElementById("saveBtn");
+const resizeBtn = document.getElementById("resizeBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const brightnessRange = document.getElementById("brightnessRange");
+const contrastRange = document.getElementById("contrastRange");
+const blurRange = document.getElementById("blurRange");
+
+brightnessRange.addEventListener("input", ApplyFilters);
+contrastRange.addEventListener("input", ApplyFilters);
+blurRange.addEventListener("input", ApplyFilters);
+
+canvas.addEventListener("click", function(event) {
+  var rect = canvas.getBoundingClientRect();
+  textPosX = event.clientX - rect.left;
+  textPosY = event.clientY - rect.top;
+  RedrawCanvas();
+});
+
+function ApplyFilters() {
+    const brightness = brightnessRange.value;
+    const contrast = contrastRange.value;
+    const blur = blurRange.value;
+
+    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+    RedrawCanvas();
+}
+
+function Init() {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    RedrawCanvas();
+}
+
+function RedrawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    if (logoLoaded) {
+        ctx.filter = 'none';
+        ajouterLogo(ctx, canvas.width, canvas.height);
+    }
+
+    var overlayText = document.getElementById('overlayText').value;
+    if (overlayText) {
+        ajouterTexte(ctx, overlayText, textPosX, textPosY);
+    }
+}
+
+saveBtn.addEventListener("click", function() {
+  telechargerImage(canvas, 'image-sauvegardée.jpg');
+});
+
+resizeBtn.addEventListener("click", function() {
+  convertir960x629A72ppp();
+});
+
+downloadBtn.addEventListener("click", function() {
+  telechargerImage(canvas, 'image-téléchargée.jpg');
+});
+
+function appliquerTexte() {
+  if (!imgLoaded) {
+    alert("Veuillez d'abord charger une image.");
+    return;
+  }
+  RedrawCanvas();
+}
+</script>
+
+</body>
+</html>
