@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -128,13 +129,14 @@ body {
   <p>Si vous le souhaitez, vous pouvez ajouter un logo Romeo Charlie ou simplement convertir.</p>
   <!-- Bouton pour choisir le logo -->
   <div class="file-input-container">
-    <button class="btn btn-choisir-logo" onclick="chargerLogoGitHub()">Logo Romeo Charlie</button>
+    <button class="btn btn-choisir-logo" onclick="document.getElementById('logoFile').click()">Logo Romeo Charlie</button>
     <input type="file" id="logoFile" accept="image/png" class="hidden-input">
   </div>
   <!-- Explication pour les fichiers PNG -->
   <p>Seuls les fichiers PNG sont acceptés pour le logo ou cadre.</p>
   <!-- Canvas pour afficher l'image -->
   <canvas id="canvas"></canvas>
+<p>Votre image sera convertie à 960x629 jpg.</p>
   <!-- Barre de progression -->
   <div class="progress">
     <div class="progress-bar" id="progress-bar"></div>
@@ -171,8 +173,6 @@ body {
 </div>
 
 <div class="text-instructions">EQSL</div>
-<div class="create-image">Pour créer une image, vous pouvez utiliser GPT Chat ou Copilot de Microsoft</div>
-
 <script>
 var img = new Image();
 var logo = new Image();
@@ -194,12 +194,24 @@ function chargerImage(event, callback) {
   lecteur.readAsDataURL(fichier);
 }
 
-function convertir960x629A72ppp() {
-  if (!imgLoaded) {
-    alert("Veuillez sélectionner une image.");
+function chargerLogo(event) {
+  var fichier = event.target.files[0];
+  if (!fichier) {
+    alert("Veuillez sélectionner un fichier PNG pour le logo.");
     return;
   }
+  var lecteur = new FileReader();
+  lecteur.onload = function(e) {
+    logo.src = e.target.result;
+    logo.onload = function() {
+      logoLoaded = true;
+      ApplyFilters();
+    };
+  };
+  lecteur.readAsDataURL(fichier);
+}
 
+function convertir960x629A72ppp() {
   var canvas = document.getElementById('canvas');
   var ctx = canvas.getContext('2d');
   var largeurSouhaitee = 960;
@@ -219,17 +231,8 @@ function convertir960x629A72ppp() {
   }
 }
 
-function chargerLogoGitHub() {
-  var logoUrl = 'https://raw.githubusercontent.com/rclstar/my-image-editor/main/logo%20rc.png';
-  logo.src = logoUrl;
-  logo.onload = function() {
-    logoLoaded = true;
-    ApplyFilters();
-  };
-}
-
 function ajouterLogo(ctx, largeur, hauteur) {
-  ctx.drawImage(logo, largeur - logo.width, hauteur - logo.height);
+  ctx.drawImage(logo, 0, 0, largeur, hauteur);
 }
 
 function ajouterTexte(ctx, texte, x, y) {
@@ -268,7 +271,7 @@ function sauvegarderTelecharger() {
   convertir960x629A72ppp();
   setTimeout(function() {
     telechargerImage(canvas, 'image-sauvegardée.jpg');
-  }, 1000); // Attendre que l'image soit prête avant de la télécharger
+  }, 500); // Attendre que l'image soit prête avant de la télécharger
 }
 
 function telechargerImage(canvas, nomFichier) {
@@ -299,15 +302,7 @@ document.getElementById('inputFile').addEventListener('change', function(event) 
     };
   });
 });
-document.getElementById('logoFile').addEventListener('change', function(event) {
-  chargerImage(event, function(result) {
-    logo.src = result;
-    logo.onload = function() {
-      logoLoaded = true;
-      ApplyFilters(); // Assurez-vous que le logo est appliqué après le chargement
-    };
-  });
-});
+document.getElementById('logoFile').addEventListener('change', chargerLogo);
 
 /* Fonctions et événements supplémentaires */
 const canvas = document.getElementById("canvas");
