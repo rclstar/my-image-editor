@@ -171,6 +171,7 @@ body {
 </div>
 
 <div class="text-instructions">EQSL</div>
+<div class="create-image">Pour créer une image, vous pouvez utiliser GPT Chat ou Copilot de Microsoft</div>
 
 <script>
 var img = new Image();
@@ -216,8 +217,6 @@ function convertir960x629A72ppp() {
   if (overlayText) {
     ajouterTexte(ctx, overlayText, textPosX, textPosY);
   }
-
-  afficherApercu(canvas);
 }
 
 function chargerLogoGitHub() {
@@ -261,21 +260,15 @@ function ajouterTexte(ctx, texte, x, y) {
   ctx.fillText(texte, x, y);
 }
 
-function afficherApercu(canvas) {
-  var preview = document.getElementById('preview');
-  preview.src = canvas.toDataURL('image/jpeg');
-  document.querySelector('.progress').style.display = 'block';
-  var progressBar = document.getElementById('progress-bar');
-  progressBar.style.width = '100%';
-}
-
 function sauvegarderTelecharger() {
   if (!imgLoaded) {
     alert("Veuillez d'abord charger une image.");
     return;
   }
   convertir960x629A72ppp();
-  telechargerImage(canvas, 'image-sauvegardée.jpg');
+  setTimeout(function() {
+    telechargerImage(canvas, 'image-sauvegardée.jpg');
+  }, 1000); // Attendre que l'image soit prête avant de la télécharger
 }
 
 function telechargerImage(canvas, nomFichier) {
