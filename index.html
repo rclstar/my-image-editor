@@ -5,8 +5,12 @@
 <title>Convertisseur EQSL à 960x629 JPG</title>
 <style>
 body {
-  background-color: Lavender;
-  font-family: Arial, sans-serif;
+ background-color: Lavender;
+ background-image: url('https://raw.githubusercontent.com/rclstar/my-image-editor/main/1a1.jpg');
+ background-size: cover;
+ background-position: center;
+ background-repeat: no-repeat;
+ font-family: Arial, sans-serif;
 }
 .wrapper {
   display: flex;
@@ -62,15 +66,12 @@ body {
   background-color: #007BFF;
   border-radius: 5px;
 }
-.input {
+.input, .button {
   display: inline-block;
   vertical-align: middle;
   margin: 5px;
 }
 .button {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 5px;
   background: #6694f6;
   border: 0;
   border-radius: 15px;
@@ -119,37 +120,37 @@ body {
 <body>
 
 <div class="wrapper">
-  <!-- Bouton pour choisir l'image principale -->
+  
   <div class="file-input-container">
     <button class="btn btn-choisir-fichier" onclick="document.getElementById('inputFile').click()">Choisir un fichier</button>
     <input type="file" id="inputFile" accept="image/*" class="hidden-input">
   </div>
-  <!-- Explication pour logo -->
+  
   <p>Si vous le souhaitez, vous pouvez ajouter un logo Romeo Charlie ou simplement convertir.</p>
-  <!-- Bouton pour choisir le logo -->
+  
   <div class="file-input-container">
     <button class="btn btn-choisir-logo" onclick="chargerLogoGitHub()">Logo Romeo Charlie</button>
     <input type="file" id="logoFile" accept="image/png" class="hidden-input">
   </div>
-  <!-- Explication pour les fichiers PNG -->
-  <p>cliquez sur le logo Romeo Charlie et cliquez sur l'image</p>
-  <!-- Canvas pour afficher l'image -->
+  
+  
+  
   <canvas id="canvas"></canvas>
-  <!-- Barre de progression -->
+  
   <div class="progress">
     <div class="progress-bar" id="progress-bar"></div>
   </div>
-  <!-- Nouvelles fonctionnalités -->
+  
   <p>
     <button class="button btn-sauvegarder-telecharger" onclick="sauvegarderTelecharger()">Sauvegarder et Télécharger</button>
   </p>
-  <!-- Contrôles pour les filtres d'image -->
+  
   <div class="filter-container">
     <label>Luminosité: <input type="range" id="brightnessRange" min="0" max="200" value="100"></label>
     <label>Contraste: <input type="range" id="contrastRange" min="0" max="200" value="100"></label>
     <label>Flou: <input type="range" id="blurRange" min="0" max="10" step="0.1" value="0"></label>
   </div>
-  <!-- Entrée de texte pour superposition -->
+ 
   <div class="text-overlay-container">
     <label for="overlayText">Entrez votre texte ici et cliquez sur la photo où vous souhaitez l'ajouter:</label>
     <input type="text" id="overlayText" placeholder="Entrez votre texte ici">
@@ -159,6 +160,27 @@ body {
     <br>
     <label for="textSize">Taille du texte:</label>
     <input type="number" id="textSize" value="30">
+    <br>
+    <label for="textFont">Police:</label>
+    <select id="textFont">
+      <option value="Arial">Arial</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Comic Sans MS">Comic Sans MS</option>
+    </select>
+    <br>
+    <label for="textWeight">Style:</label>
+    <select id="textWeight">
+      <option value="normal">Normal</option>
+      <option value="bold">Gras</option>
+      <option value="italic">Italique</option>
+      <option value="bold italic">Gras Italique</option>
+    </select>
+    <br>
+    <label for="textShadowColor">Couleur de l'ombre:</label>
+    <input type="color" id="textShadowColor" value="#000000">
     <br>
     <label for="textShadow">Ombre du texte:</label>
     <input type="checkbox" id="textShadow">
@@ -208,16 +230,7 @@ function convertir960x629A72ppp() {
   canvas.width = largeurSouhaitee;
   canvas.height = hauteurSouhaitee;
 
-  ApplyFilters();
-  ctx.drawImage(img, 0, 0, largeurSouhaitee, hauteurSouhaitee);
-  if (logoLoaded) {
-    ajouterLogo(ctx, largeurSouhaitee, hauteurSouhaitee);
-  }
-
-  var overlayText = document.getElementById('overlayText').value;
-  if (overlayText) {
-    ajouterTexte(ctx, overlayText, textPosX, textPosY);
-  }
+  redrawCanvas(true);
 
   afficherApercu(canvas);
 }
@@ -227,8 +240,7 @@ function chargerLogoGitHub() {
   logo.src = logoUrl;
   logo.onload = function() {
     logoLoaded = true;
-    // Remove unnecessary ApplyFilters() call here
-    // ApplyFilters();
+    redrawCanvas();
   };
 }
 
@@ -239,15 +251,18 @@ function ajouterLogo(ctx, largeur, hauteur) {
 function ajouterTexte(ctx, texte, x, y) {
   var textSize = document.getElementById('textSize').value;
   var textColor = document.getElementById('textColor').value;
+  var textFont = document.getElementById('textFont').value;
+  var textWeight = document.getElementById('textWeight').value;
   var textShadow = document.getElementById('textShadow').checked;
+  var textShadowColor = document.getElementById('textShadowColor').value;
   var textBorder = document.getElementById('textBorder').checked;
 
-  ctx.font = textSize + "px Arial";
+  ctx.font = `${textWeight} ${textSize}px ${textFont}`;
   ctx.fillStyle = textColor;
   ctx.textAlign = "center";
 
   if (textShadow) {
-    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowColor = textShadowColor;
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
     ctx.shadowBlur = 5;
@@ -265,9 +280,6 @@ function ajouterTexte(ctx, texte, x, y) {
 }
 
 function afficherApercu(canvas) {
-  // Remove unnecessary 'preview' variable declaration
-  // var preview = document.getElementById('preview');
-  // preview.src = canvas.toDataURL('image/jpeg');
   document.querySelector('.progress').style.display = 'block';
   var progressBar = document.getElementById('progress-bar');
   progressBar.style.width = '100%';
@@ -288,7 +300,6 @@ function telechargerImage(canvas, nomFichier) {
 
   var dataURL = canvas.toDataURL('image/jpeg', qualité);
 
-  // Réduire progressivement la qualité jusqu'à atteindre la taille de fichier souhaitée
   while (dataURL.length > tailleMax && qualité > 0.1) {
     qualité -= 0.1;
     dataURL = canvas.toDataURL('image/jpeg', qualité);
@@ -300,13 +311,12 @@ function telechargerImage(canvas, nomFichier) {
   link.click();
 }
 
-// Gestion des événements pour charger les fichiers
 document.getElementById('inputFile').addEventListener('change', function(event) {
   chargerImage(event, function(result) {
     img.src = result;
     img.onload = function() {
       imgLoaded = true;
-      Init();
+      initCanvas();
     };
   });
 });
@@ -315,13 +325,11 @@ document.getElementById('logoFile').addEventListener('change', function(event) {
     logo.src = result;
     logo.onload = function() {
       logoLoaded = true;
-      // Assurez-vous que le logo est appliqué après le chargement
-      ApplyFilters(); 
+      redrawCanvas();
     };
   });
 });
 
-/* Fonctions et événements supplémentaires */
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -329,36 +337,42 @@ const brightnessRange = document.getElementById("brightnessRange");
 const contrastRange = document.getElementById("contrastRange");
 const blurRange = document.getElementById("blurRange");
 
-brightnessRange.addEventListener("input", ApplyFilters);
-contrastRange.addEventListener("input", ApplyFilters);
-blurRange.addEventListener("input", ApplyFilters);
+brightnessRange.addEventListener("input", applyFilters);
+contrastRange.addEventListener("input", applyFilters);
+blurRange.addEventListener("input", applyFilters);
 
 canvas.addEventListener("click", function(event) {
   var rect = canvas.getBoundingClientRect();
   textPosX = event.clientX - rect.left;
   textPosY = event.clientY - rect.top;
-  RedrawCanvas();
+  redrawCanvas();
 });
 
-function ApplyFilters() {
+function applyFilters() {
+  redrawCanvas();
+}
+
+function initCanvas() {
+  canvas.width = img.width;
+  canvas.height = img.height;
+  redrawCanvas();
+}
+
+function redrawCanvas(finalRender = false) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   const brightness = brightnessRange.value;
   const contrast = contrastRange.value;
   const blur = blurRange.value;
 
-  ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
-  RedrawCanvas();
-}
-
-function Init() {
-  canvas.width = img.width;
-  canvas.height = img.height;
-  RedrawCanvas();
-}
-
-function RedrawCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!finalRender) {
+    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+  } else {
+    ctx.filter = 'none';
+  }
+  
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
+  
   if (logoLoaded) {
     ctx.filter = 'none';
     ajouterLogo(ctx, canvas.width, canvas.height);
@@ -368,6 +382,10 @@ function RedrawCanvas() {
   if (overlayText) {
     ajouterTexte(ctx, overlayText, textPosX, textPosY);
   }
+
+  if (finalRender) {
+    applyFiltersToFinalImage();
+  }
 }
 
 function appliquerTexte() {
@@ -375,9 +393,26 @@ function appliquerTexte() {
     alert("Veuillez d'abord charger une image.");
     return;
   }
-  RedrawCanvas();
+  redrawCanvas();
+}
+
+function applyFiltersToFinalImage() {
+  const offscreenCanvas = document.createElement('canvas');
+  const offscreenCtx = offscreenCanvas.getContext('2d');
+  offscreenCanvas.width = canvas.width;
+  offscreenCanvas.height = canvas.height;
+
+  const brightness = brightnessRange.value;
+  const contrast = contrastRange.value;
+  const blur = blurRange.value;
+
+  offscreenCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+  offscreenCtx.drawImage(canvas, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(offscreenCanvas, 0, 0);
 }
 </script>
 
 </body>
 </html>
+
