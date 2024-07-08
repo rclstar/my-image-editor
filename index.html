@@ -133,7 +133,7 @@ body {
     <input type="file" id="logoFile" accept="image/png" class="hidden-input">
   </div>
   
-  
+  <p>Cliquez sur le logo Romeo Charlie et cliquez sur l'image</p>
   
   <canvas id="canvas"></canvas>
   
@@ -359,20 +359,21 @@ function initCanvas() {
 }
 
 function redrawCanvas(finalRender = false) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const offscreenCanvas = document.createElement('canvas');
+  const offscreenCtx = offscreenCanvas.getContext('2d');
+  offscreenCanvas.width = canvas.width;
+  offscreenCanvas.height = canvas.height;
 
   const brightness = brightnessRange.value;
   const contrast = contrastRange.value;
   const blur = blurRange.value;
 
-  if (!finalRender) {
-    ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
-  } else {
-    ctx.filter = 'none';
-  }
-  
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  
+  offscreenCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+  offscreenCtx.drawImage(img, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(offscreenCanvas, 0, 0);
+
   if (logoLoaded) {
     ctx.filter = 'none';
     ajouterLogo(ctx, canvas.width, canvas.height);
@@ -381,10 +382,6 @@ function redrawCanvas(finalRender = false) {
   var overlayText = document.getElementById('overlayText').value;
   if (overlayText) {
     ajouterTexte(ctx, overlayText, textPosX, textPosY);
-  }
-
-  if (finalRender) {
-    applyFiltersToFinalImage();
   }
 }
 
