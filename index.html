@@ -1,195 +1,215 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Convertisseur EQSL à 960x629 JPG</title>
-<style>
-body {
- background-color: Lavender;
- background-image: url('https://raw.githubusercontent.com/rclstar/my-image-editor/main/1a1.jpg');
- background-size: cover;
- background-position: center;
- background-repeat: no-repeat;
- font-family: Arial, sans-serif;
-}
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  position: relative;
-}
-.file-input-container, .button-container, .filter-container, .text-overlay-container {
-  margin: 10px 0;
-}
-.btn {
-  margin: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 14px;
-  transition: transform 0.2s, background 0.2s;
-}
-.btn:hover {
-  transform: scale(1.05);
-}
-.btn-choisir-fichier {
-  background: linear-gradient(45deg, #007BFF, #00CFFF);
-}
-.btn-choisir-logo {
-  background: linear-gradient(45deg, #FF5733, #FF8C33);
-}
-.btn-sauvegarder-telecharger {
-  background: linear-gradient(45deg, #FF33FF, #FF66FF);
-}
-.hidden-input {
-  display: none;
-}
-#canvas {
-  display: block;
-  max-width: 100%;
-  border-radius: 10px;
-  border: 1px solid #000;
-}
-.progress {
-  width: 100%;
-  background-color: #f3f3f3;
-  border-radius: 5px;
-  margin-top: 20px;
-  display: none;
-}
-.progress-bar {
-  width: 0%;
-  height: 10px;
-  background-color: #007BFF;
-  border-radius: 5px;
-}
-.input, .button {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 5px;
-}
-.button {
-  background: #6694f6;
-  border: 0;
-  border-radius: 15px;
-  padding: 10px 25px;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  font-size: 14px;
-}
-.button:hover {
-  background: #8acef1;
-}
-.button_disabled {
-  background: #555;
-  cursor: not-allowed;
-}
-.a, .a:visited {
-  color: #6694f6;
-}
-.a:hover {
-  text-decoration: none;
-}
-.a_hidden {
-  opacity: 0;
-}
-.text-instructions {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  color: white;
-  background-color: #ff8c33;
-  padding: 5px;
-  border-radius: 5px;
-}
-.create-image {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px;
-  border-radius: 5px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Site Web</title>
+    <style>
+        body {
+            background-image: url('https://raw.githubusercontent.com/rclstar/my-image-editor/main/1a1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+            }
+        } /* Fermez la règle @media ici */
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+        .file-input-container, .button-container, .filter-container, .text-overlay-container {
+            margin: 10px 0;
+        }
+        .btn {
+            margin: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .btn-choisir-fichier {
+            background: linear-gradient(45deg, #007BFF, #00CFFF);
+        }
+        .btn-choisir-logo {
+            background: linear-gradient(45deg, #FF5733, #FF8C33);
+        }
+        .btn-sauvegarder-telecharger {
+            background: linear-gradient(45deg, #FF33FF, #FF66FF);
+        }
+        .hidden-input {
+            display: none;
+        }
+        #canvas {
+            display: block;
+            max-width: 100%;
+            border-radius: 10px;
+            border: 1px solid #000;
+        }
+        .progress {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 10px;
+            background-color: #007BFF;
+            border-radius: 5px;
+        }
+        .input, .button {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 5px;
+        }
+        .button {
+            background: #6694f6;
+            border: 0;
+            border-radius: 15px;
+            padding: 10px 25px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            font-size: 14px;
+        }
+        .button:hover {
+            background: #8acef1;
+        }
+        .button_disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .a, .a:visited {
+            color: #6694f6;
+        }
+        .a:hover {
+            text-decoration: none;
+        }
+        .a_hidden {
+            opacity: 0;
+        }
+        .text-instructions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background-color: #ff8c33;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .create-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="wrapper">
-  
-  <div class="file-input-container">
-    <button class="btn btn-choisir-fichier" onclick="document.getElementById('inputFile').click()">Choisir un fichier</button>
-    <input type="file" id="inputFile" accept="image/*" class="hidden-input">
-  </div>
-  
-  <p>Si vous le souhaitez, vous pouvez ajouter un logo Romeo Charlie ou simplement convertir.</p>
-  
-  <div class="file-input-container">
-    <button class="btn btn-choisir-logo" onclick="chargerLogoGitHub()">Logo Romeo Charlie</button>
-    <input type="file" id="logoFile" accept="image/png" class="hidden-input">
-  </div>
-  
-  
-  
-  <canvas id="canvas"></canvas>
-  
-  <div class="progress">
-    <div class="progress-bar" id="progress-bar"></div>
-  </div>
-  
-  <p>
-    <button class="button btn-sauvegarder-telecharger" onclick="sauvegarderTelecharger()">Sauvegarder et Télécharger</button>
-  </p>
-  
-  <div class="filter-container">
-    <label>Luminosité: <input type="range" id="brightnessRange" min="0" max="200" value="100"></label>
-    <label>Contraste: <input type="range" id="contrastRange" min="0" max="200" value="100"></label>
-    <label>Flou: <input type="range" id="blurRange" min="0" max="10" step="0.1" value="0"></label>
-  </div>
- 
-  <div class="text-overlay-container">
-    <label for="overlayText">Entrez votre texte ici et cliquez sur la photo où vous souhaitez l'ajouter:</label>
-    <input type="text" id="overlayText" placeholder="Entrez votre texte ici">
-    <br>
-    <label for="textColor">Couleur du texte:</label>
-    <input type="color" id="textColor" value="#FFFFFF">
-    <br>
-    <label for="textSize">Taille du texte:</label>
-    <input type="number" id="textSize" value="30">
-    <br>
-    <label for="textFont">Police:</label>
-    <select id="textFont">
-      <option value="Arial">Arial</option>
-      <option value="Verdana">Verdana</option>
-      <option value="Times New Roman">Times New Roman</option>
-      <option value="Courier New">Courier New</option>
-      <option value="Georgia">Georgia</option>
-      <option value="Comic Sans MS">Comic Sans MS</option>
-    </select>
-    <br>
-    <label for="textWeight">Style:</label>
-    <select id="textWeight">
-      <option value="normal">Normal</option>
-      <option value="bold">Gras</option>
-      <option value="italic">Italique</option>
-      <option value="bold italic">Gras Italique</option>
-    </select>
-    <br>
-    <label for="textShadowColor">Couleur de l'ombre:</label>
-    <input type="color" id="textShadowColor" value="#000000">
-    <br>
-    <label for="textShadow">Ombre du texte:</label>
-    <input type="checkbox" id="textShadow">
-    <br>
-    <label for="textBorder">Bordure du texte:</label>
-    <input type="checkbox" id="textBorder">
-    <br>
-    <button class="button" onclick="appliquerTexte()">Appliquer le texte</button>
-  </div>
+    <div class="file-input-container">
+        <button class="btn btn-choisir-fichier" onclick="document.getElementById('inputFile').click()">Choisir un fichier</button>
+        <input type="file" id="inputFile" accept="image/*" class="hidden-input">
+    </div>
+    
+    <p>Si vous le souhaitez, vous pouvez ajouter un logo Romeo Charlie ou simplement convertir.</p>
+    
+    <div class="file-input-container">
+        <button class="btn btn-choisir-logo" onclick="chargerLogoGitHub()">Logo Romeo Charlie</button>
+        <input type="file" id="logoFile" accept="image/png" class="hidden-input">
+    </div>
+    
+    <p>Cliquez sur le logo Romeo Charlie et cliquez sur l'image</p>
+    
+    <canvas id="canvas"></canvas>
+    
+    <div class="progress">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <p>
+        <button class="button btn-sauvegarder-telecharger" onclick="sauvegarderTelecharger()">Sauvegarder et Télécharger</button>
+    </p>
+    
+    <div class="filter-container">
+        <label>Luminosité: <input type="range" id="brightnessRange" min="0" max="200" value="100"></label>
+        <label>Contraste: <input type="range" id="contrastRange" min="0" max="200" value="100"></label>
+        <label>Flou: <input type="range" id="blurRange" min="0" max="10" step="0.1" value="0"></label>
+    </div>
+    
+    <div class="text-overlay-container">
+        <label for="overlayText">Entrez votre texte ici et cliquez sur la photo où vous souhaitez l'ajouter:</label>
+        <input type="text" id="overlayText" placeholder="Entrez votre texte ici">
+        <br>
+        <label for="textColor">Couleur du texte:</label>
+        <input type="color" id="textColor" value="#FFFFFF">
+        <br>
+        <label for="textSize">Taille du texte:</label>
+        <input type="number" id="textSize" value="30">
+        <br>
+        <label for="textFont">Police:</label>
+        <select id="textFont">
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Comic Sans MS">Comic Sans MS</option>
+        </select>
+        <br>
+        <label for="textWeight">Style:</label>
+        <select id="textWeight">
+            <option value="normal">Normal</option>
+            <option value="bold">Gras</option>
+            <option value="italic">Italique</option>
+            <option value="bold italic">Gras Italique</option>
+        </select>
+        <br>
+        <label for="textShadowColor">Couleur de l'ombre:</label>
+        <input type="color" id="textShadowColor" value="#000000">
+        <br>
+        <label for="textShadow">Ombre du texte:</label>
+        <input type="checkbox" id="textShadow">
+        <br>
+        <label for="textBorder">Bordure du texte:</label>
+        <input type="checkbox" id="textBorder">
+        <br>
+        <button class="button" onclick="appliquerTexte()">Appliquer le texte</button>
+    </div>
 </div>
 
 <div class="text-instructions">EQSL</div>
@@ -205,129 +225,129 @@ var textPosX = 0;
 var textPosY = 0;
 
 function chargerImage(event, callback) {
-  var fichier = event.target.files[0];
-  if (!fichier) {
-    alert("Veuillez sélectionner un fichier image.");
-    return;
-  }
-  var lecteur = new FileReader();
-  lecteur.onload = function(e) {
-    callback(e.target.result);
-  };
-  lecteur.readAsDataURL(fichier);
+    var fichier = event.target.files[0];
+    if (!fichier) {
+        alert("Veuillez sélectionner un fichier image.");
+        return;
+    }
+    var lecteur = new FileReader();
+    lecteur.onload = function(e) {
+        callback(e.target.result);
+    };
+    lecteur.readAsDataURL(fichier);
 }
 
 function convertir960x629A72ppp() {
-  if (!imgLoaded) {
-    alert("Veuillez sélectionner une image.");
-    return;
-  }
+    if (!imgLoaded) {
+        alert("Veuillez sélectionner une image.");
+        return;
+    }
 
-  var canvas = document.getElementById('canvas');
-  var ctx = canvas.getContext('2d');
-  var largeurSouhaitee = 960;
-  var hauteurSouhaitee = 629;
-  canvas.width = largeurSouhaitee;
-  canvas.height = hauteurSouhaitee;
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var largeurSouhaitee = 960;
+    var hauteurSouhaitee = 629;
+    canvas.width = largeurSouhaitee;
+    canvas.height = hauteurSouhaitee;
 
-  redrawCanvas(true);
+    redrawCanvas(true);
 
-  afficherApercu(canvas);
+    afficherApercu(canvas);
 }
 
 function chargerLogoGitHub() {
-  var logoUrl = 'https://raw.githubusercontent.com/rclstar/my-image-editor/main/logo%20rc.png';
-  logo.src = logoUrl;
-  logo.onload = function() {
-    logoLoaded = true;
-    redrawCanvas();
-  };
+    var logoUrl = 'https://raw.githubusercontent.com/rclstar/my-image-editor/main/logo%20rc.png';
+    logo.src = logoUrl;
+    logo.onload = function() {
+        logoLoaded = true;
+        redrawCanvas();
+    };
 }
 
 function ajouterLogo(ctx, largeur, hauteur) {
-  ctx.drawImage(logo, 0, 0, largeur, hauteur);
+    ctx.drawImage(logo, 0, 0, largeur, hauteur);
 }
 
 function ajouterTexte(ctx, texte, x, y) {
-  var textSize = document.getElementById('textSize').value;
-  var textColor = document.getElementById('textColor').value;
-  var textFont = document.getElementById('textFont').value;
-  var textWeight = document.getElementById('textWeight').value;
-  var textShadow = document.getElementById('textShadow').checked;
-  var textShadowColor = document.getElementById('textShadowColor').value;
-  var textBorder = document.getElementById('textBorder').checked;
+    var textSize = document.getElementById('textSize').value;
+    var textColor = document.getElementById('textColor').value;
+    var textFont = document.getElementById('textFont').value;
+    var textWeight = document.getElementById('textWeight').value;
+    var textShadow = document.getElementById('textShadow').checked;
+    var textShadowColor = document.getElementById('textShadowColor').value;
+    var textBorder = document.getElementById('textBorder').checked;
 
-  ctx.font = `${textWeight} ${textSize}px ${textFont}`;
-  ctx.fillStyle = textColor;
-  ctx.textAlign = "center";
+    ctx.font = `${textWeight} ${textSize}px ${textFont}`;
+    ctx.fillStyle = textColor;
+    ctx.textAlign = "center";
 
-  if (textShadow) {
-    ctx.shadowColor = textShadowColor;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-    ctx.shadowBlur = 5;
-  } else {
-    ctx.shadowColor = "transparent";
-  }
+    if (textShadow) {
+        ctx.shadowColor = textShadowColor;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+        ctx.shadowBlur = 5;
+    } else {
+        ctx.shadowColor = "transparent";
+    }
 
-  if (textBorder) {
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.strokeText(texte, x, y);
-  }
+    if (textBorder) {
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.strokeText(texte, x, y);
+    }
 
-  ctx.fillText(texte, x, y);
+    ctx.fillText(texte, x, y);
 }
 
 function afficherApercu(canvas) {
-  document.querySelector('.progress').style.display = 'block';
-  var progressBar = document.getElementById('progress-bar');
-  progressBar.style.width = '100%';
+    document.querySelector('.progress').style.display = 'block';
+    var progressBar = document.getElementById('progress-bar');
+    progressBar.style.width = '100%';
 }
 
 function sauvegarderTelecharger() {
-  if (!imgLoaded) {
-    alert("Veuillez d'abord charger une image.");
-    return;
-  }
-  convertir960x629A72ppp();
-  telechargerImage(canvas, 'image-sauvegardée.jpg');
+    if (!imgLoaded) {
+        alert("Veuillez d'abord charger une image.");
+        return;
+    }
+    convertir960x629A72ppp();
+    telechargerImage(canvas, 'image-sauvegardée.jpg');
 }
 
 function telechargerImage(canvas, nomFichier) {
-  var qualité = 0.9; // Initialiser avec une qualité élevée
-  var tailleMax = 2 * 1024 * 1024; // 2 Mo en octets
+    var qualité = 0.9; // Initialiser avec une qualité élevée
+    var tailleMax = 2 * 1024 * 1024; // 2 Mo en octets
 
-  var dataURL = canvas.toDataURL('image/jpeg', qualité);
+    var dataURL = canvas.toDataURL('image/jpeg', qualité);
 
-  while (dataURL.length > tailleMax && qualité > 0.1) {
-    qualité -= 0.1;
-    dataURL = canvas.toDataURL('image/jpeg', qualité);
-  }
+    while (dataURL.length > tailleMax && qualité > 0.1) {
+        qualité -= 0.1;
+        dataURL = canvas.toDataURL('image/jpeg', qualité);
+    }
 
-  var link = document.createElement('a');
-  link.download = nomFichier;
-  link.href = dataURL;
-  link.click();
+    var link = document.createElement('a');
+    link.download = nomFichier;
+    link.href = dataURL;
+    link.click();
 }
 
 document.getElementById('inputFile').addEventListener('change', function(event) {
-  chargerImage(event, function(result) {
-    img.src = result;
-    img.onload = function() {
-      imgLoaded = true;
-      initCanvas();
-    };
-  });
+    chargerImage(event, function(result) {
+        img.src = result;
+        img.onload = function() {
+            imgLoaded = true;
+            initCanvas();
+        };
+    });
 });
 document.getElementById('logoFile').addEventListener('change', function(event) {
-  chargerImage(event, function(result) {
-    logo.src = result;
-    logo.onload = function() {
-      logoLoaded = true;
-      redrawCanvas();
-    };
-  });
+    chargerImage(event, function(result) {
+        logo.src = result;
+        logo.onload = function() {
+            logoLoaded = true;
+            redrawCanvas();
+        };
+    });
 });
 
 const canvas = document.getElementById("canvas");
@@ -342,74 +362,73 @@ contrastRange.addEventListener("input", applyFilters);
 blurRange.addEventListener("input", applyFilters);
 
 canvas.addEventListener("click", function(event) {
-  var rect = canvas.getBoundingClientRect();
-  textPosX = event.clientX - rect.left;
-  textPosY = event.clientY - rect.top;
-  redrawCanvas();
+    var rect = canvas.getBoundingClientRect();
+    textPosX = event.clientX - rect.left;
+    textPosY = event.clientY - rect.top;
+    redrawCanvas();
 });
 
 function applyFilters() {
-  redrawCanvas();
+    redrawCanvas();
 }
 
 function initCanvas() {
-  canvas.width = img.width;
-  canvas.height = img.height;
-  redrawCanvas();
+    canvas.width = img.width;
+    canvas.height = img.height;
+    redrawCanvas();
 }
 
 function redrawCanvas(finalRender = false) {
-  const offscreenCanvas = document.createElement('canvas');
-  const offscreenCtx = offscreenCanvas.getContext('2d');
-  offscreenCanvas.width = canvas.width;
-  offscreenCanvas.height = canvas.height;
+    const offscreenCanvas = document.createElement('canvas');
+    const offscreenCtx = offscreenCanvas.getContext('2d');
+    offscreenCanvas.width = canvas.width;
+    offscreenCanvas.height = canvas.height;
 
-  const brightness = brightnessRange.value;
-  const contrast = contrastRange.value;
-  const blur = blurRange.value;
+    const brightness = brightnessRange.value;
+    const contrast = contrastRange.value;
+    const blur = blurRange.value;
 
-  offscreenCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
-  offscreenCtx.drawImage(img, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+    offscreenCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+    offscreenCtx.drawImage(img, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(offscreenCanvas, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(offscreenCanvas, 0, 0);
 
-  if (logoLoaded) {
-    ctx.filter = 'none';
-    ajouterLogo(ctx, canvas.width, canvas.height);
-  }
+    if (logoLoaded) {
+        ctx.filter = 'none';
+        ajouterLogo(ctx, canvas.width, canvas.height);
+    }
 
-  var overlayText = document.getElementById('overlayText').value;
-  if (overlayText) {
-    ajouterTexte(ctx, overlayText, textPosX, textPosY);
-  }
+    var overlayText = document.getElementById('overlayText').value;
+    if (overlayText) {
+        ajouterTexte(ctx, overlayText, textPosX, textPosY);
+    }
 }
 
 function appliquerTexte() {
-  if (!imgLoaded) {
-    alert("Veuillez d'abord charger une image.");
-    return;
-  }
-  redrawCanvas();
+    if (!imgLoaded) {
+        alert("Veuillez d'abord charger une image.");
+        return;
+    }
+    redrawCanvas();
 }
 
 function applyFiltersToFinalImage() {
-  const offscreenCanvas = document.createElement('canvas');
-  const offscreenCtx = offscreenCanvas.getContext('2d');
-  offscreenCanvas.width = canvas.width;
-  offscreenCanvas.height = canvas.height;
+    const offscreenCanvas = document.createElement('canvas');
+    const offscreenCtx = offscreenCanvas.getContext('2d');
+    offscreenCanvas.width = canvas.width;
+    offscreenCanvas.height = canvas.height;
 
-  const brightness = brightnessRange.value;
-  const contrast = contrastRange.value;
-  const blur = blurRange.value;
+    const brightness = brightnessRange.value;
+    const contrast = contrastRange.value;
+    const blur = blurRange.value;
 
-  offscreenCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
-  offscreenCtx.drawImage(canvas, 0, 0);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(offscreenCanvas, 0, 0);
+    offscreenCtx.filter = `brightness(${brightness}%) contrast(${contrast}%) blur(${blur}px)`;
+    offscreenCtx.drawImage(canvas, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(offscreenCanvas, 0, 0);
 }
 </script>
 
 </body>
 </html>
-
